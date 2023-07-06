@@ -108,6 +108,7 @@ def main(args):
         cv2.imwrite(args.img_path, frame)
 
         if ret:
+            frame_count+=1
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             # Apply model to frame
@@ -135,8 +136,8 @@ def main(args):
                 results = format_results(results[0], 0)
                 annotations = prompt(results, args, text=True)
                 annotations = np.array([annotations])
-                fast_process(
-                    annotations=annotations, args=args, mask_random_color=args.randomcolor
+                output_frame = fast_process(
+                    annotations=annotations, args=args, mask_random_color=args.randomcolor, frame_count=frame_count
                 )
 
             elif args.point_prompt[0] != [0, 0]:
@@ -145,25 +146,25 @@ def main(args):
                 # list to numpy
                 annotations = np.array([annotations])
                 print(annotations.shape)
-                fast_process(
+                output_frame = fast_process(
                     annotations=annotations,
                     args=args,
                     mask_random_color=args.randomcolor,
-                    points=args.point_prompt,
+                    points=args.point_prompt, frame_count=frame_count
                 )
 
             else:
-                fast_process(
+                output_frame = fast_process(
                     annotations=results[0].masks.data,
                     args=args,
-                    mask_random_color=args.randomcolor,
+                    mask_random_color=args.randomcolor, frame_count=frame_count
                 )
 
         else:
             break
 
     cv2.imshow("frame", frame)
-    out.write(frame)
+    out.write(output_frame)
 
     # Release capture and destroy windows at the end of the video
     cap.release()

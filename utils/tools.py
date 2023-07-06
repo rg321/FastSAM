@@ -93,7 +93,7 @@ def get_bbox_from_mask(mask):
 
 
 def fast_process(
-        annotations, args, mask_random_color, bbox=None, points=None, edges=False
+        annotations, args, mask_random_color, bbox=None, points=None, edges=False, video, frame_count=0
 ):
     if isinstance(annotations[0], dict):
         annotations = [annotation["segmentation"]
@@ -184,13 +184,18 @@ def fast_process(
 
     cols, rows = fig.canvas.get_width_height()
     img_array = np.fromstring(buf, dtype=np.uint8).reshape(rows, cols, 3)
-    cv2.imwrite(os.path.join(save_path, result_name),
+    if frame_count > 0:
+        output_img_path = os.path.join(save_path, str(frame_count -1) + '_' + result_name )
+    else:
+        output_img_path = os.path.join(save_path, result_name )
+    cv2.imwrite(output_img_path,
                 cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
     cv2.imshow("result", cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
     # keep 0.1s
     # cv2.waitKey(100)
     # remove
     plt.close()
+    return cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
 
 # CPU post process
 def fast_show_mask(
