@@ -67,6 +67,10 @@ def parse_args():
         "--video_path", type=str, default=0, help="path to video file or integer for webcam"
     )
 
+    parser.add_argument(
+        "--no_display", action='store_true', help="for running without display, like on colab"
+    )
+
     return parser.parse_args()
 
 
@@ -163,13 +167,15 @@ def main(args):
         else:
             break
 
-    cv2.imshow("frame", frame)
+    if not args.no_display:
+        cv2.imshow("frame", frame)
     out.write(output_frame)
 
     # Release capture and destroy windows at the end of the video
     cap.release()
     out.release()
-    cv2.destroyAllWindows()
+    if not args.no_display:
+        cv2.destroyAllWindows()
 
 
 def prompt(results, args, box=None, point=None, text=None):
