@@ -30,7 +30,7 @@ def parse_args():
         "--output", type=str, default="./output/", help="image save path"
     )
     parser.add_argument(
-        "--randomcolor", type=bool, default=True, help="mask random color"
+        "--randomcolor", type=bool, default=False, help="mask random color"
     )
     parser.add_argument(
         "--point_prompt", type=str, default="[[0,0]]", help="[[x1,y1],[x2,y2]]"
