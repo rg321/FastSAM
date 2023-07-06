@@ -98,7 +98,7 @@ def main(args):
     fourcc = cv2.VideoWriter_fourcc(*'MP4V')
     result_name = os.path.basename(args.video_path)
     video_output_path = os.path.join(args.output, result_name)
-    out = VideoWriter(video_output_path, fourcc, 20.0, (int(width), int(height)))
+    out = cv2.VideoWriter(video_output_path, fourcc, 20.0, (int(width), int(height)))
 
     while(cap.isOpened()):
         # Read frame
