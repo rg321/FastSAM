@@ -95,7 +95,7 @@ def main(args):
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
-    fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     result_name = os.path.basename(args.video_path)
     video_output_path = os.path.join(args.output, result_name)
     out = cv2.VideoWriter(video_output_path, fourcc, 20.0, (int(width), int(height)))
