@@ -164,12 +164,13 @@ def main(args):
                     mask_random_color=args.randomcolor, frame_count=frame_count
                 )
 
+            out.write(output_frame)
         else:
             break
 
     if not args.no_display:
         cv2.imshow("frame", frame)
-    out.write(output_frame)
+    
 
     # Release capture and destroy windows at the end of the video
     cap.release()
