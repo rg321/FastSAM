@@ -190,7 +190,8 @@ def fast_process(
         output_img_path = os.path.join(save_path, result_name )
     cv2.imwrite(output_img_path,
                 cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
-    cv2.imshow("result", cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
+    if not args.no_display:
+        cv2.imshow("result", cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
     # keep 0.1s
     # cv2.waitKey(100)
     # remove
