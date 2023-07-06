@@ -1,6 +1,7 @@
 from utils.tools import *
 import argparse
 import ast
+from fastsam import FastSAM, FastSAMPrompt
 
 
 def parse_args():
@@ -82,7 +83,7 @@ def overlay_transparent(frame, mask, alpha=0.5):
 
 def main(args):
     # load model
-    model = YOLO(args.model_path)
+    model = FastSAM(args.model_path)
     args.point_prompt = ast.literal_eval(args.point_prompt)
     args.box_prompt = ast.literal_eval(args.box_prompt)
     args.point_label = ast.literal_eval(args.point_label)
@@ -90,6 +91,11 @@ def main(args):
     # Open video stream
     cap = cv2.VideoCapture(args.video_path)
     frame_count = 0
+    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH )
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT )
+
+    fourcc = VideoWriter_fourcc(*'MP4V')
+    out = VideoWriter(args.video_path, fourcc, 20.0, (int(width), int(height)))
 
     while(cap.isOpened()):
         # Read frame
