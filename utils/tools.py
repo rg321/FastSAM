@@ -93,33 +93,29 @@ def get_bbox_from_mask(mask):
 
 
 def fast_process(
-    annotations, args, mask_random_color, bbox=None, points=None, edges=False
+        annotations, args, mask_random_color, bbox=None, points=None, edges=False
 ):
     if isinstance(annotations[0], dict):
-        annotations = [annotation["segmentation"] for annotation in annotations]
+        annotations = [annotation["segmentation"]
+                       for annotation in annotations]
     result_name = os.path.basename(args.img_path)
     image = cv2.imread(args.img_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     original_h = image.shape[0]
     original_w = image.shape[1]
-    if sys.platform == "darwin":
-            plt.switch_backend("TkAgg")
     plt.figure(figsize=(original_w/100, original_h/100))
-    # Add subplot with no margin.
-    plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
-    plt.margins(0, 0)
-    plt.gca().xaxis.set_major_locator(plt.NullLocator())
-    plt.gca().yaxis.set_major_locator(plt.NullLocator())
     plt.imshow(image)
     if args.better_quality == True:
         if isinstance(annotations[0], torch.Tensor):
             annotations = np.array(annotations.cpu())
         for i, mask in enumerate(annotations):
             mask = cv2.morphologyEx(
-                mask.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8)
+                mask.astype(np.uint8), cv2.MORPH_CLOSE, np.ones(
+                    (3, 3), np.uint8)
             )
             annotations[i] = cv2.morphologyEx(
-                mask.astype(np.uint8), cv2.MORPH_OPEN, np.ones((8, 8), np.uint8)
+                mask.astype(np.uint8), cv2.MORPH_OPEN, np.ones(
+                    (8, 8), np.uint8)
             )
     if args.device == "cpu":
         annotations = np.array(annotations)
@@ -129,7 +125,7 @@ def fast_process(
             random_color=mask_random_color,
             bbox=bbox,
             points=points,
-            point_label=args.point_label,
+            pointlabel=args.point_label,
             retinamask=args.retina,
             target_height=original_h,
             target_width=original_w,
@@ -143,7 +139,7 @@ def fast_process(
             random_color=args.randomcolor,
             bbox=bbox,
             points=points,
-            point_label=args.point_label,
+            pointlabel=args.point_label,
             retinamask=args.retina,
             target_height=original_h,
             target_width=original_w,
@@ -179,17 +175,22 @@ def fast_process(
     plt.axis("off")
     fig = plt.gcf()
     plt.draw()
-    
+
     try:
         buf = fig.canvas.tostring_rgb()
     except AttributeError:
         fig.canvas.draw()
         buf = fig.canvas.tostring_rgb()
-    
+
     cols, rows = fig.canvas.get_width_height()
     img_array = np.fromstring(buf, dtype=np.uint8).reshape(rows, cols, 3)
-    cv2.imwrite(os.path.join(save_path, result_name), cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
-
+    cv2.imwrite(os.path.join(save_path, result_name),
+                cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
+    cv2.imshow("result", cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR))
+    # keep 0.1s
+    # cv2.waitKey(100)
+    # remove
+    plt.close()
 
 # CPU post process
 def fast_show_mask(
