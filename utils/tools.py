@@ -93,7 +93,7 @@ def get_bbox_from_mask(mask):
 
 
 def fast_process(
-        annotations, args, mask_random_color, bbox=None, points=None, edges=False, video, frame_count=0
+        annotations, args, mask_random_color, bbox=None, points=None, edges=False, video=None, frame_count=0
 ):
     if isinstance(annotations[0], dict):
         annotations = [annotation["segmentation"]
