@@ -160,9 +160,11 @@ def main(args):
             break
 
     cv2.imshow("frame", frame)
+    out.write(frame)
 
     # Release capture and destroy windows at the end of the video
     cap.release()
+    out.release()
     cv2.destroyAllWindows()
 
 
