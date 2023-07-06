@@ -108,10 +108,10 @@ def main(args):
         # Read frame
         ret, frame = cap.read()
 
-        # save frame to --img_path
-        cv2.imwrite(args.img_path, frame)
 
         if ret:
+            # save frame to --img_path
+            cv2.imwrite(args.img_path, frame)
             frame_count+=1
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
