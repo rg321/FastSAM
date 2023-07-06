@@ -2,6 +2,7 @@ from utils.tools import *
 import argparse
 import ast
 from fastsam import FastSAM, FastSAMPrompt
+import os
 
 
 def parse_args():
@@ -91,11 +92,13 @@ def main(args):
     # Open video stream
     cap = cv2.VideoCapture(args.video_path)
     frame_count = 0
-    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH )
-    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT )
+    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
     fourcc = VideoWriter_fourcc(*'MP4V')
-    out = VideoWriter(args.video_path, fourcc, 20.0, (int(width), int(height)))
+    result_name = os.path.basename(args.video_path)
+    video_output_path = os.path.join(args.output, result_name)
+    out = VideoWriter(video_output_path, fourcc, 20.0, (int(width), int(height)))
 
     while(cap.isOpened()):
         # Read frame
